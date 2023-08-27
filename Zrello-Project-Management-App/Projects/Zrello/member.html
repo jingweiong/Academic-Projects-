@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zrello</title>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet"/>
+
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg">
+        <div id="nav-container" class="container-fluid row justify-content-between">
+            <div id="nav-left" class="col-4 justify-content-between">
+                <a  href=index.html class="btn btn-dark">Product Backlog</a>
+                <a href=sprint.html class="btn btn-dark">Sprint Backlog</a>
+                <a href=member.html class="btn btn-dark">Member List</a>
+            </div>
+            <div class="col-4 justify-content-between"> Member List </div>
+            <button id="addMemberButton" onclick="openModal()" type="button" class="col-1 btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">Add Member</button>
+            
+        </div>
+    </nav>
+    
+    <!-- Body -->
+    <div id="mainContainer" class="container-fluid text-center mt-5">
+        <div id="taskGroupContainer" class="taskGroupContainer row justify-content-around">
+            <div id="memberList" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Members</h4>
+
+                <!-- <div class="card">
+                    <h5 class="card-header">
+                        Task Name  
+                        <span class="badge bg-secondary">
+                            5
+                        </span>
+                    </h5>
+                    
+
+                    <div id="card-container" class="container-fluid row justify-content-between align-items-center">
+                        <h6 id="card-left" class="col-10 card-header">
+                            Coding and refacotring 
+                        </h6>
+                        <h6 id="card-right" class="col-2 card-header">
+                            5
+                        </h6>
+                    </div> 
+
+                    <div class="card-body">
+                        <span class="badge card-text bg-secondary">Tag</span>
+                        <p class="card-text my-1">Assigned To</p>
+                        <p class="card-text my-1">Task Date Here</p>
+                        <p class="hiddenInput" ></p>
+                        <p class="hiddenInput" ></p>
+                        <p class="hiddenInput"></p>
+                        <div id="taskButtonContainer" class="container-fluid">
+                            <div class="row justify-content-center">
+                                <button  onclick="viewTask(this)" class="col-2 btn "><img src="assets/magnifying-glass-solid.svg" alt="View Icon"></button>
+                                <button class="col-2 btn mx-3 "><img src="assets/pencil-solid.svg" alt="Edit Icon"></button>
+                                <button onclick="deleteTask(this)" class="col-2 btn "><img src="assets/trash-solid.svg" alt="Delete Icon"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+            <div id="timeData" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Time data</h4>
+                <table class="table table-dark table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col">Info</th>
+                        <th scope="col">Time spent (hours)</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <th scope="row">Total time logged</th>
+                        <td id="totalTimeLogged">0</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Average time per member</th>
+                        <td id="averageTimePerMember">0</td>
+                      </tr>
+                    </tbody>
+                </table>
+
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Graph display</h4>
+                <table id="averageTimeInput">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="2">Show the time spent over a date range</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        <form>
+                            <tr>
+                                <th scope="row">Start range</th>
+                                <td>
+                                    <input id="startDate" type="date" class="form-control" name="setTodaysDate" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">End range</th>
+                                <td>
+                                    <input id="endDate" type="date" class="form-control" name="setTodaysDate" >
+                                    <div class="err" id="err-tdeadline"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">
+                                    <button type="button"  onclick="outputGraph()" class="btn btn-secondary" >Output graph</button>
+                                </th>
+                            </tr>
+                        </form>
+                    </tbody>
+                </table>
+                <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+            </div>
+            <!-- <div id="taskProgress" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">In Progress</h4>
+            </div>
+            <div id="taskReview" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Peer Review</h4>
+            </div>
+            <div id="taskTesting" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Testing</h4>
+            </div>
+            <div id="taskCompleted" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Completed</h4>
+            </div> -->
+        </div>
+    </div>
+    <div id="viewContainer" class="hide container-fluid text-center mt-5">
+
+    </div>
+
+
+
+    <!-- Add Member Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Add Member</h5>
+            <button onclick=closeModal() type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="addModalBody" class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="memberName" class="form-label">Member Name</label>
+                        <input type="text" class="form-control" id="memberName" >
+                        <div class="err" id="err-tname"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" class="form-control" id="email" >
+                        <div class="err" id="err-tdesc"></div>
+                    </div>
+                    
+                    
+                </form>
+            </div>
+            <div class="modal-footer">
+                <p id="addSuccessText" class="hide addSuccessText my-2">
+                    Member successfully added! 
+                </p>
+                <button id="addMemberCloseButton" onclick=closeModal() type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="modalAddButton" onclick="addMember(this)" type="button" class="btn btn-primary" data-bs-dismiss="modal">Add</button>
+                
+            </div>
+        </div>
+        </div>
+        <div class="hide" id="graphScript"></div>
+    </div>
+    
+    
+    <!-- JavaScript Bundle with Popper -->
+    <script src="js/shared.js"></script>
+    <script src="member.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <script>
+        new Chart("myChart", document.getElementById("graphScript").value);
+    </script>
+        
+    
+
+</body>
+</html>

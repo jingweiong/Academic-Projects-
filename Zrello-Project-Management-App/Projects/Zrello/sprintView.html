@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zrello</title>
+
+    <!-- CSS only -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-gH2yIJqKdNHPEq0n4Mqa/HGKIhSkIHeL5AyhkYV8i59U5AR6csBvApHHNl/vI1Bx" crossorigin="anonymous">
+    <link href="style.css" rel="stylesheet"/>
+
+</head>
+<body>
+    <!--Navbar-->
+    <nav class="navbar navbar-expand-lg">
+        <div id="nav-container" class="container-fluid row justify-content-between">
+            <div id="nav-left" class="col-4 justify-content-between">
+                <a  href=sprint.html class="btn btn-dark">Sprint backlog</a>
+                <button id="openTimeLogButton" class="hide" type="button" data-bs-toggle="modal" data-bs-target="#addTimeLogModal">Open time log</button>
+                <button id="addTaskButton" class="hide" type="button" class="col-1 btn btn-light" data-bs-toggle="modal" data-bs-target="#exampleModal">Edit task</button>
+            </div>
+            <div class="col-6 "> Viewing sprint details </div>
+        </div>
+    </nav>
+    
+    <!-- Body -->
+    <div id="mainContainer" class="container-fluid text-center mt-5">
+        <div id="sprintViewContainer" class="sprintViewContainer row justify-content-around">
+            <div id="sprintDetails" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Sprint details</h4>
+                <table id="sprintDetailsTable" class="table table-striped">
+                    <thead>
+                      <tr>
+                        <!-- This part is the header for the first table -->
+                        <th scope="col">Detail</th>
+                        <th scope="col">Info</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <!-- each of the <tr> is one row of the table-->
+                        <th  scope="row">Sprint name</th>
+                        <td id="sprintName">TEST_NAME</td>
+                      </tr>
+                      <tr>
+                        <th  scope="row">Desc</th>
+                        <td id="sprintDesc">TEST_DESC slightly longer since this might be a longer text</td>
+                      </tr>
+                      <tr>
+                        <th  scope="row">Start</th>
+                        <td id="sprintStart">dd/mm/yyyy</td>
+                      </tr>
+                      <tr>
+                        <th  scope="row">End</th>
+                        <td id="sprintEnd">dd/mm/yyyy</td>
+                      </tr>
+                      <tr>
+                        <th  scope="row">Average time: </th>
+                        <td id="sprintAveTime">2 hours</td>
+                      </tr>
+                      <tr>
+                        <th scope="row">Total time: </th>
+                        <td id="sprintTotalTime">16 hours</td>
+                      </tr>
+                    </tbody>
+                </table>
+
+                <table id="sprintMembers" class="table table-striped">
+                    <!-- this is the list of all the sprint members -->
+                    <thead>
+                      <tr>
+                        <th scope="col">Member</th>
+                        <th scope="col">Time spent</th>
+                      </tr>
+                    </thead>
+                    <tbody id="sprintMembersBody">
+                      <!-- <tr>
+                        for now i have just put dummy inputs
+                        <th scope="row" id="emptyMember"></th>
+                        <td></td>
+                      </tr> -->
+                    </tbody>
+                </table>
+
+                <table id="averageTimeInput">
+                    <thead>
+                        <tr>
+                            <th scope="col" colspan="2">Search for average time spent</th>
+                        </tr>
+                        
+                    </thead>
+                    <tbody>
+                        <form>
+                            <tr>
+                                <th scope="row">Start range</th>
+                                <td>
+                                    <input id="startDate" type="date" class="form-control" name="setTodaysDate" >
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">End range</th>
+                                <td>
+                                    <input id="endDate" type="date" class="form-control" name="setTodaysDate" >
+                                    <div class="err" id="err-tdeadline"></div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>
+                                    <button type="button" onclick="outputAverageTime()" class="btn btn-secondary" >Output average time</button>
+                                </th>
+                                <td id="averageTimeSprint">
+                                    5.5 hours
+                                </td>
+                            </tr>
+
+                        </form>
+                    </tbody>
+                </table>
+                
+                
+            </div>
+            <div id="taskPending" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Pending</h4>
+            </div>
+            <div id="taskProgress" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">In Progress</h4>
+            </div>
+            <div id="taskReview" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Peer review</h4>
+            </div>
+            <div id="taskTesting" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Testing</h4>
+            </div>
+            <div id="taskCompleted" class="taskContainer col-2 py-3">
+                <h4 class="mb-4 py-3 rounded-pill bg-light">Completed</h4>
+            </div>
+        </div>
+    </div>
+    <div id="viewContainer" class="hide container-fluid text-center mt-5">
+
+    </div>
+
+
+
+    <!-- Add Task Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">Edit task</h5>
+            <button onclick=closeModal() type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="addModalBody" class="modal-body">
+                <form>
+                    <div class="mb-3">
+                        <label for="taskName" class="form-label">Task Name</label>
+                        <input type="text" class="form-control" id="taskName" >
+                        <div class="err" id="err-tname"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="taskDesc" class="form-label">Description</label>
+                        <input type="text" class="form-control" id="taskDesc" >
+                        <div class="err" id="err-tdesc"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="assignDropdown" class="form-label">Assign To</label>
+                        <select id="assignDropdown" class="form-select" onclick="memberOnClick()">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="numberRange" class="form-label">Story Points</label>
+                        <input id="numberRange" type="number" class="form-control" min="1" step="1" max="10" aria-describedby="numberHelp">
+                        <div id="numberHelp" class="form-text">Please enter a number between 1 and 10.</div>
+                        <div class="err" id="err-tnum"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="statusDropdown" class="form-label">Status</label>
+                        <select id="statusDropdown" class="form-select">
+                            <option selected value="Pending">Pending</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Peer Review">Peer Review</option>
+                            <option value="Testing">Testing</option>
+                            <option value="Completed">Completed</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="deadline" class="form-label">Deadline</label>
+                        <input id="deadline" type="date" class="form-control" name="setTodaysDate" >
+                        <div class="err" id="err-tdeadline"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="tagDropdown" class="form-label">Tag</label>
+                        <select id="tagDropdown" class="form-select">
+                            <option selected value="Frontend">Frontend</option>
+                            <option value="Backend">Backend</option>
+                            <option value="Management">Management</option>
+                            <option value="Refactor">Refactor</option>
+                            <option value="Bugfix">Bugfix</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="priorityDropdown" class="form-label">Priority</label>
+                        <select id="priorityDropdown" class="form-select">
+                            <option class="optionCritical" selected value="Critical">Critical</option>
+                            <option class="optionHigh" value="High">High</option>
+                            <option class="optionMedium" value="Medium">Medium</option>
+                            <option class="optionLow" value="Low">Low</option>
+                        </select>
+                    </div>
+                    <div class="mb-3 ">
+                        <label for="originDropdown" class="form-label">Task Origin</label>
+                        <select id="originDropdown" class="form-select">
+                            <option selected value="User Story">User Story</option>
+                            <option value="Bugfix">Bugfix</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="sprintDropdown" class="form-label">Move Sprint</label>
+                        <select id="sprintDropdown" class="form-select" onclick="sprintOnClick()">
+                            <!-- <option selected value="Avinash">Avinash</option>
+                            <option value="Aaron">Aaron</option>
+                            <option value="Jing Wei">Jing Wei</option>
+                            <option value="Garrett">Garrett</option>
+                            <option value="Malcolm">Malcolm</option> -->
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button id="addTaskCloseButton" onclick=closeModal() type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="modalAddButton" onclick="saveTask(this)" type="button" class="btn btn-primary" data-bs-dismiss="modal">Save</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Time tracking modal -->
+    
+    <div class="modal fade" id="addTimeLogModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <button id="openTimeLogButton" type="button" data-bs-toggle="modal" data-bs-target="#addTimeLogModal"></button>
+        <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            <h5 class="modal-title" id="addTimeLogModalLabel">Add time log</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div id="addModalBody" class="modal-body">
+                <form>  
+                    <div class="mb-3">
+                        <label for="dateTimeLog" class="form-label">Date</label>
+                        <input id="dateTimeLog" type="date" class="form-control" name="setTodaysDate" >
+                        <div class="err" id="err-tdeadline"></div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="hoursTimeLog" class="form-label">Hours (integer)</label>
+                        <input id="hoursTimeLog" type="number" class="form-control" min="0" aria-describedby="numberHelp">
+                        <div id="numberHelp" class="form-text">Please enter a positive integer</div>
+                        <div class="err" id="err-tnum"></div>
+                    </div>
+
+                </form>
+            </div>
+            <div class="modal-footer">
+                <p id="addSuccessText" class="hide addSuccessText my-2">
+                    Sprint successfully added! 
+                </p>
+                <button id="timeLogModalCloseButton" type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="timeLogAddButton" onclick="timeTrackingSave()" type="button" class="btn btn-primary">Add</button>
+            </div>
+        </div>
+        </div>
+    </div>
+
+     
+
+
+
+    
+    <!-- JavaScript Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-A3rJD856KowSb7dwlZdYEkO39Gagi7vIsF0jrRAoQmDKKtQBHUuLZ9AsSv4jD4Xa" crossorigin="anonymous"></script>
+    <script src="sprintView.js"></script>
+</body>
+</html>
