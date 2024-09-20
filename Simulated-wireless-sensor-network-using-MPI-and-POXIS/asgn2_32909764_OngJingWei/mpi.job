@@ -1,0 +1,26 @@
+#!/bin/bash
+#SBATCH --job-name=mpi_job
+#SBATCH --time=00:10:00
+#SBATCH --mem=16G
+#SBATCH --ntasks=17
+#SBATCH --cpus-per-task=8
+#SBATCH --ntasks-per-node=17
+#SBATCH --output=mpi.%j.out
+#SBATCH --partition=defq
+
+
+module load openmpi-4.1.4-gcc-11.2.0-6z47sq3
+
+if [ ! -f mpi ]
+then
+ mpicc asgn2.c -o asgn2.o -lpthread -fopenmp
+else
+ if [ asgn2.c -nt mpi ]
+ then
+  mpicc asgn2.c -o asgn2.o -lpthread -fopenmp
+ fi
+fi
+
+srun -n 17 ./asgn2.o 4 4
+
+exit 0

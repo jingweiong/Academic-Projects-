@@ -1,0 +1,10 @@
+Global rank: 0. Cart rank: 0. Coord: (0, 0). Left: -2. Right: 1. Top: -2. Bottom: 3
+
+Time: 1698030845, Availability: 2
+Time: 1698030848, Availability: 1
+Time: 1698030851, Availability: 0
+
+All ports are in FULL use!
+Getting nearest available neighbour nodes' data...
+
+Time: 1698030854, Availability: 1
